@@ -12,7 +12,7 @@ import bestacc from '../data/bestacc.js';
 import bestshoes from '../data/bestshoes.js';
 import review from '../data/review.js';
 
-import { addItem } from './store.js';
+import { addItem } from '../util/cart.js';
 import { useDispatch } from 'react-redux';
 
 import style from '../css/Detail.module.css';
@@ -179,13 +179,8 @@ function Price(props) {
           className={style.purpleBtn}
           onClick={() => {
             setShow(true);
-            dispatch(addItem({
-              id: basket.id,
-              imgUrl: basket.imgUrl.replace("img/", ""),
-              product: basket.product,
-              count: count,
-              price: Number(basket.price.replace(",", ""))
-            }));
+            //장바구니 상품 추가 
+            addItem({pid: props.thisItem.id, size: "Free", qty: count, userId: 1});
           }}
         >장바구니</Button>{' '}
 
