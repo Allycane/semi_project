@@ -1,4 +1,4 @@
-import { axiosPost } from "./dataAxios.js";
+import { axiosPost,axiosGet } from "./dataAxios.js";
 
 export const addItem=async ({pid,size,qty,userId})=>{
 
@@ -13,3 +13,9 @@ export const addItem=async ({pid,size,qty,userId})=>{
     return cartItems;
 
 }
+
+export const getCartItems=async(userId)=>{
+    const cartItems= await axiosGet(`/carts/list?userId=${userId}`);
+    console.log(cartItems);
+    return cartItems;       
+};

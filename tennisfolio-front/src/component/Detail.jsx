@@ -180,7 +180,7 @@ function Price(props) {
           onClick={() => {
             setShow(true);
             //장바구니 상품 추가 
-            addItem({pid: props.thisItem.id, size: "Free", qty: count, userId: 1});
+            addItem({pid: props.thisItem.id, size: "Free", qty: count, userId: "hong"});
           }}
         >장바구니</Button>{' '}
 
