@@ -1,24 +1,32 @@
-let carts = [];
+import * as repository from "../repository/carts.js";
 
-const addToCart = (req, res) => {
-  const { pid, size, qty, userId } = req.body;
-  const newCartItem = {
-    id: Date.now(),
-    pid,
-    size,
-    qty,
-    userId
-  };
+export const addToCart = async (req, res) => {
+    const { pid, size, qty, userId } = req.body;
 
-  carts.push(newCartItem);
+    const cartItem = await repository.getCartItem({ pid, size, userId });
 
-  console.log("현재 장바구니:", carts);
+    if (cartItem) {
+      await repository.updateCartQty({
+        cid: cartItem.cid,
+        qty
+      });
 
-  res.json({
-    message: "장바구니에 추가되었습니다.",
-    cartItem: newCartItem,
-    carts
-  });
+      return res.json({
+        message: "장바구니 수량이 증가되었습니다.",
+        type: "update"
+      });
+    }
+    const result = await repository.addCartItem({ pid, size, qty, userId });
+
+    res.json({
+      message: "장바구니에 추가되었습니다.",
+      type: "insert",
+      insertId: result.insertId
+    });
+  
 };
 
-export default { addToCart };
+export const getCartItems = async (req, res) => {
+  const result=await repository.getCartItems(req.query.userId);
+  res.json(result);
+};
