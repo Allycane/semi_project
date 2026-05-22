@@ -65,7 +65,7 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-page-container">
+    <div className="signup-page-container" style={{ paddingTop: "100px", minHeight: "80vh" }}>
       <Form onSubmit={handleNextOrSubmit}>
         <div className="signup-body">
           {view === true

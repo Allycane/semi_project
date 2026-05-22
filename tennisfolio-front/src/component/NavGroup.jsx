@@ -1,6 +1,7 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuthStore } from "../../store/useAuthStore.js";
 
 import Login from './Login.jsx';
 import SignUp from './SignUp.jsx';
@@ -23,8 +24,17 @@ function NavGroup() {
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
 
+  const isLogin = useAuthStore((s) => s.isLogin);
+  const userId = useAuthStore((s) => s.userId);
+  const logout = useAuthStore((s) => s.logout);
+
   const row = { display: "flex", flexFlow: "row wrap", alignItems: "center", marginLeft: "50px" };
   const bold = { fontSize: "20px", fontWeight: "700" };
+
+  const handleLogout = () => {
+    logout();
+    alert("로그아웃 되었습니다.");
+  };
 
   return (
     <>
@@ -32,8 +42,23 @@ function NavGroup() {
         <Container style={{ maxWidth: "1550px" }}>
           <Navbar.Brand href="#home"></Navbar.Brand>
           <Nav className="ml-auto login">
-            <Login />
-            <SignUp />
+            {isLogin ? (
+              <>
+                <span className="loginLink" style={{ color: "#fff", margin: "10px", fontWeight: "bold" }}>
+                  {userId}님 환영합니다
+                </span>
+                <Nav.Link href="#" className="loginLink" onClick={handleLogout}>
+                  로그아웃
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                <Login />
+                <Nav.Link className="loginLink" onClick={() => navigate('/signup')}>
+                  회원가입
+                </Nav.Link>
+              </>
+            )}
             <Nav.Link href="#" className="loginLink">고객센터</Nav.Link>
           </Nav>
         </Container>
@@ -41,10 +66,8 @@ function NavGroup() {
 
       <Navbar expand="xxl">
         <Container className="categoryBar">
-          <Navbar.Brand href="#">
-            <Nav.Link onClick={() => navigate('/')}>
-              <img src="/img/logo.svg" width="150" height="65" alt="logo" />
-            </Nav.Link>
+          <Navbar.Brand style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
+            <img src="/img/logo.svg" width="150" height="65" alt="logo" />
           </Navbar.Brand>
           <Navbar.Collapse className="category">
             <Nav className="me-auto">
@@ -64,7 +87,7 @@ function NavGroup() {
           </Navbar.Collapse>
           <Navbar className="iconbox">
             <Nav.Link onClick={() => setIsClicked(!isClicked)}><i className="fa-solid fa-magnifying-glass"></i></Nav.Link>
-            <Nav.Link onClick={() => navigate("/Cart")}><i className="fa-solid fa-cart-shopping"></i></Nav.Link>
+            <Nav.Link onClick={() => navigate("/cart")}><i className="fa-solid fa-cart-shopping"></i></Nav.Link>
             <Nav.Link onClick={handleShow}><i className="fa-solid fa-bars"></i></Nav.Link>
             <Menu show={show} handleClose={handleClose} />
           </Navbar>
@@ -91,15 +114,17 @@ function NavGroup() {
             <CardList />
           </div>
         } />
-        <Route path="/detail/hot/:id"          element={<Detail />} />
-        <Route path="/detail/best/bag/:id"     element={<Detail />} />
-        <Route path="/detail/best/item/:id"    element={<Detail />} />
+        <Route path="/detail/hot/:id" element={<Detail />} />
+        <Route path="/detail/best/bag/:id" element={<Detail />} />
+        <Route path="/detail/best/item/:id" element={<Detail />} />
         <Route path="/detail/best/racquet/:id" element={<Detail />} />
-        <Route path="/detail/best/woman/:id"   element={<Detail />} />
-        <Route path="/detail/best/man/:id"     element={<Detail />} />
-        <Route path="/detail/best/acc/:id"     element={<Detail />} />
-        <Route path="/detail/best/shoes/:id"   element={<Detail />} />
-        <Route path="/cart"                    element={<Cart />} />
+        <Route path="/detail/best/woman/:id" element={<Detail />} />
+        <Route path="/detail/best/man/:id" element={<Detail />} />
+        <Route path="/detail/best/acc/:id" element={<Detail />} />
+        <Route path="/detail/best/shoes/:id" element={<Detail />} />
+        <Route path="/cart" element={<Cart />} />
+        {/* [회원가입] 회원가입 페이지 라우트 등록 */}
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </>
   );
