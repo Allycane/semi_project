@@ -1,0 +1,32 @@
+2026-05-22 update
+[Front]
+
+> Login.jsx 수정
+- import axios, useAuthStore 추가
+- 주석으로 수정 위치 확인 가능
+
+> NavGroup.jsx 수정 
+- 로그인/로그아웃 로직 부분만 일부 수정하였습니다. (주석으로 수정 위치 확인 가능)
+- import useAuthStore 추가 (useAuthStore는 shoppy처럼 경로/코드 동일)
+
+> store/useAuthStore 생성 (shopyy와 내용 전부 동일)
+
+[Server]
+> login.js routes/controller/repository 생성
+> app.js 내용 추가 
+> DB/connection.js 생성 (shopyy와 내용 전부 동일)
+
+로그인 확인을 위해 설치한 패키지
+front
+> zustand
+> axios
+
+server
+> bcrypt
+> cors
+> dotenv
+> express
+> jsonwebtoken
+> mysql2
+
+-- 수정사항이나 오류가 있으면 추가로 적어주세요
