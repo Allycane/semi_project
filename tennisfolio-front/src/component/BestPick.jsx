@@ -17,6 +17,9 @@ import bestacc from '../data/bestacc.js';
 import bestshoes from '../data/bestshoes.js';
 
 function BestPick() {
+  // useState를 활용해 tennisCategory 라는 이름의 배열객체를 DB와 연동
+  // datafetch.js 파일 생성 후 get, post, put, delete 등의 fetch 혹은 axios 함수 생성 및 임포트
+
   let [tennisCategory] = useState(bestdata);
   let [view, setView] = useState(0);
 
@@ -41,6 +44,7 @@ function BestPick() {
       </div>
 
       {/* 카테고리 슬라이드 */}
+      
       <Swiper
         slidesPerView={3}
         speed={500}
