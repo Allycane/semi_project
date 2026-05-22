@@ -3,7 +3,13 @@ import data from '../data/data.js';
 
 function Style() {
   const space = { whiteSpace: "pre-line" };
-  let [styleData] = useState(data);
+  const [styleData, setStyleData] = useState(data);
+
+  const handleLike = (id) => {
+      setStyleData(styleData.map(item => 
+        item.id === id ? { ...item, likeNum: item.likeNum + 1 } : item
+      ));
+    };
 
   return (
     <>
@@ -38,6 +44,7 @@ function Style() {
                   content={item.content}
                   tag={item.tag}
                   hash={item.hash}
+                  onLike={handleLike} 
                 />
               ))}
             </div>
@@ -65,7 +72,7 @@ function Stylebox(props) {
             <div className="profileImg"><img src={props.imgUrl} alt="profile" /></div>
             <div className="id">{props.id}</div>
           </div>
-          <div className="like">
+        <div className="like" onClick={() => props.onLike(props.id)} style={{ cursor: "pointer" }}>
             <i className="fa-regular fa-face-smile"></i>
             <span className="count">{props.likeNum}</span>
           </div>
@@ -73,12 +80,14 @@ function Stylebox(props) {
         <div className="profileMid"><p>{props.content}</p></div>
         <div className="profileBottom">
           <ul style={tagStyle} className="tagList">
-            {props.tag.map((item, i) => <li key={i}>{item}</li>)}
+            
+            {props.tag?.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
         </div>
         <div className="hashbox">
           <ul style={tagStyle} className="hashList">
-            {props.hash.map((item, i) => <li key={i}>{item}</li>)}
+            
+            {props.hash?.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
         </div>
       </div>
@@ -86,4 +95,4 @@ function Stylebox(props) {
   );
 }
 
-export default Style;
+export default Style; 
