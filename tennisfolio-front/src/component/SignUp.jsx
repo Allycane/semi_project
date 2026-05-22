@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Nav, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/Nav.css';
@@ -7,6 +7,7 @@ import '../css/Nav.css';
 function SignUp() {
   const navigate = useNavigate();
 
+  const [show, setShow] = useState(false);
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [view, setView] = useState(true);
@@ -19,6 +20,12 @@ function SignUp() {
     confirmPassword: '',
     email: ''
   });
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+    setView(true);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,6 +62,7 @@ function SignUp() {
 
         if (response.status === 200 || response.status === 201) {
           alert("회원가입이 완료되었습니다!");
+          handleClose();
           navigate('/');
         }
       } catch (error) {
@@ -65,21 +73,32 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-page-container">
-      <Form onSubmit={handleNextOrSubmit}>
-        <div className="signup-body">
-          {view === true
-            ? <Step1 checked1={checked1} setChecked1={setChecked1} checked2={checked2} setChecked2={setChecked2} />
-            : <Step2 formData={formData} handleChange={handleChange} />
-          }
-        </div>
-        <div className="signup-footer">
-          <Button type="submit" className="nextBtn">
-            {view === true ? "다음" : "가입하기"}
-          </Button>
-        </div>
-      </Form>
-    </div>
+    <>
+      <Nav.Link onClick={handleShow} href="#" className="loginLink">
+        회원가입
+      </Nav.Link>
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header>
+          <img src="/img/logo.svg" alt="logo" />
+          <button onClick={handleClose} type="button">
+            <i className="fa-solid fa-x"></i>
+          </button>
+        </Modal.Header>
+        <Form onSubmit={handleNextOrSubmit}>
+          <Modal.Body>
+            {view === true
+              ? <Step1 checked1={checked1} setChecked1={setChecked1} checked2={checked2} setChecked2={setChecked2} />
+              : <Step2 formData={formData} handleChange={handleChange} />
+            }
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type="submit" className="nextBtn">
+              {view === true ? "다음" : "가입하기"}
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+    </>
   );
 }
 

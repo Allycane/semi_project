@@ -20,3 +20,6 @@ tennisfolio-front
 
 tennisfolio-server
 ==>repository/carts.js, controller/carts.js
+
+db 
+==> hot 테이블 삭제 후 best_product에 병합
