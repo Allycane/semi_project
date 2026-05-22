@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../css/Nav.css';
 
 function SignUp() {
@@ -24,7 +25,7 @@ function SignUp() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleNextOrSubmit = (e) => {
+  const handleNextOrSubmit = async (e) => {
     e.preventDefault();
     if (view === true) {
       if (checked1 && checked2) {
@@ -37,9 +38,29 @@ function SignUp() {
         alert("비밀번호가 일치하지 않습니다.");
         return;
       }
-      console.log("회원가입 데이터:", formData);
-      alert("회원가입이 완료되었습니다!");
-      navigate('/');
+
+      if (formData.password.length < 8) {
+        alert("비밀번호는 8자리 이상이어야 합니다.");
+        return;
+      }
+
+      try {
+        const response = await axios.post('/api/signup', {
+          userId: formData.userId,
+          userName: formData.userName,
+          nickname: formData.nickname,
+          password: formData.password,
+          email: formData.email
+        });
+
+        if (response.status === 200 || response.status === 201) {
+          alert("회원가입이 완료되었습니다!");
+          navigate('/');
+        }
+      } catch (error) {
+        console.error(error);
+        alert(error.response?.data?.message || "회원가입 중 오류가 발생했습니다.");
+      }
     }
   };
 

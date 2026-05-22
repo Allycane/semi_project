@@ -6,10 +6,10 @@ function Style() {
   const [styleData, setStyleData] = useState(data);
 
   const handleLike = (id) => {
-      setStyleData(styleData.map(item => 
-        item.id === id ? { ...item, likeNum: item.likeNum + 1 } : item
-      ));
-    };
+    setStyleData(styleData.map(item => 
+      item.id === id ? { ...item, likeNum: item.likeNum + 1 } : item
+    ));
+  };
 
   return (
     <>
@@ -20,6 +20,7 @@ function Style() {
               <h3 style={space} className="styleTitle">
                 {`테니스 칠 때 뭐 입지? \n 관심있는 스타일을 찾아보세요`}
               </h3>
+              {/* 남의 상토(Zustand) 안 쓰고, 원래 진진님이 짰던 깔끔한 기획 문구로 유지합니다 */}
               <p style={space} className="styleSub">
                 {`로그인 하시면 취향에 맞는 스타일을 \n 확인하실 수 있어요.`}
               </p>
@@ -69,10 +70,13 @@ function Stylebox(props) {
       <div className="profilebox">
         <div className="profileTop">
           <div className="idbox">
-            <div className="profileImg"><img src={props.imgUrl} alt="profile" /></div>
+            {/* 프로필 이미지 찌그러짐 방지만 깔끔하게 반영 */}
+            <div className="profileImg" style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "#eee", borderRadius: "50%", width: "40px", height: "40px", fontSize: "20px" }}>
+              <i className="fa-solid fa-user" style={{ color: "#aaa" }}></i>
+            </div>
             <div className="id">{props.id}</div>
           </div>
-        <div className="like" onClick={() => props.onLike(props.id)} style={{ cursor: "pointer" }}>
+          <div className="like" onClick={() => props.onLike(props.id)} style={{ cursor: "pointer" }}>
             <i className="fa-regular fa-face-smile"></i>
             <span className="count">{props.likeNum}</span>
           </div>
@@ -80,13 +84,11 @@ function Stylebox(props) {
         <div className="profileMid"><p>{props.content}</p></div>
         <div className="profileBottom">
           <ul style={tagStyle} className="tagList">
-            
             {props.tag?.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
         </div>
         <div className="hashbox">
           <ul style={tagStyle} className="hashList">
-            
             {props.hash?.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
         </div>
@@ -95,4 +97,4 @@ function Stylebox(props) {
   );
 }
 
-export default Style; 
+export default Style;
