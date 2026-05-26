@@ -1,6 +1,5 @@
 2026-05-22 update
 [Front]
-
 > Login.jsx 수정
 - import axios, useAuthStore 추가
 - 주석으로 수정 위치 확인 가능
