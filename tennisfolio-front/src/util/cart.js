@@ -1,5 +1,13 @@
 import { axiosPost,axiosGet } from "./dataAxios.js";
 
+
+//장바구니 아이템 삭제
+export const deleteItems=async (cids)=>{
+    const result= await axiosPost("/carts/delete",{cids});
+    console.log(result);
+    return result;
+};
+
 export const addItem=async ({pid,size,qty,userId})=>{
 
     const item = {

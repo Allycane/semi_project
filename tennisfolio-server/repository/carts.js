@@ -1,5 +1,16 @@
 import pool from "../DB/connection.js";
 
+//장바구니 아이템  삭제
+
+export const deleteCartItems = async (cids) => {
+  const sql = `
+    DELETE FROM cart
+    WHERE cid IN (${cids.map(() => '?').join(',')})
+  `;
+  const [rows] = await pool.execute(sql, cids);
+  return rows;
+};
+
 export const addCartItem = async (cartItem) => {//장바구니 추가
   const { pid, size, qty, userId } = cartItem;
   const sql = `

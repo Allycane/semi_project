@@ -1,7 +1,15 @@
 import * as repository from "../repository/carts.js";
+
 //장바구니 아이템 수량 변경
 
 //장바구니 아이템 삭제
+export const deleteItems = async (req, res) => {
+  const { cids } = req.body;
+  await repository.deleteCartItems(cids); 
+  res.json({
+    message: "장바구니 아이템이 삭제되었습니다."
+  });
+} ;
 
 //장바구니 아이템 추가
 export const addToCart = async (req, res) => {

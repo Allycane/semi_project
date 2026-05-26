@@ -2,7 +2,7 @@ import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import style from '../css/Cart.module.css';
 import { useEffect, useState } from 'react';
-import { getCartItems } from '../util/cart.js';
+import { getCartItems,deleteItems } from '../util/cart.js';
 
 function Cart() {
   let category = "";
@@ -25,6 +25,11 @@ function Cart() {
 
     axiosCartItems();
   }, []);
+
+  const handleDelete= async(cid)  => {
+    await deleteItems([cid]);
+    setCartItems(cartItems.filter(item => item.cid !== cid));
+  };
 
   return (
     <div className="container-fluid" style={{ background: "#f5f6f7" }}>
@@ -77,7 +82,9 @@ function Cart() {
                               <p className={style.total}>{total.toLocaleString()}</p>
                               <span className={style.won}>원</span>
                             </div>
-                            <button className={style.delete}>X</button>
+                            <button className={style.delete} onClick={() => handleDelete(item.cid)}>
+                              X
+                            </button>
                           </div>
                         </div>
                       </td>
