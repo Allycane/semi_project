@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import data from '../data/data.js';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 function Style() {
   const space = { whiteSpace: "pre-line" };
-  const [styleData, setStyleData] = useState(data);
+  const [styleData, setStyleData] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:4000/style')
+      .then(res => setStyleData(res.data))
+      .catch(err => console.error("데이터 가져오기 에러:", err));
+  }, []);
 
   const handleLike = (id) => {
     setStyleData(styleData.map(item => 
@@ -39,9 +47,9 @@ function Style() {
                   key={i}
                   reply={item.reply}
                   view={item.view}
-                  imgUrl={item.imgUrl}
-                  id={item.id}
-                  likeNum={item.likeNum}
+                  imgUrl={item.img_url}
+                  id={item.user_id}
+                  likeNum={item.like_num}
                   content={item.content}
                   tag={item.tag}
                   hash={item.hash}
