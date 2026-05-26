@@ -65,21 +65,23 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-page-container" style={{ paddingTop: "100px", minHeight: "80vh" }}>
-      <Form onSubmit={handleNextOrSubmit}>
-        <div className="signup-body">
-          {view === true
-            ? <Step1 checked1={checked1} setChecked1={setChecked1} checked2={checked2} setChecked2={setChecked2} />
-            : <Step2 formData={formData} handleChange={handleChange} />
-          }
-        </div>
-        <div className="signup-footer">
-          <Button type="submit" className="nextBtn">
-            {view === true ? "다음" : "가입하기"}
-          </Button>
-        </div>
-      </Form>
-    </div>
+    <div className='signup-wrap'>
+      <div className="signup-page-container">
+        <Form onSubmit={handleNextOrSubmit}>
+          <div className="signup-body">
+            {view === true
+              ? <Step1 checked1={checked1} setChecked1={setChecked1} checked2={checked2} setChecked2={setChecked2} />
+              : <Step2 formData={formData} handleChange={handleChange} />
+            }
+          </div>
+          <div className="signup-footer">
+            <Button type="submit" className="nextBtn">
+              {view === true ? "다음" : "가입하기"}
+            </Button>
+          </div>
+        </Form>
+      </div>
+    </div>  
   );
 }
 
