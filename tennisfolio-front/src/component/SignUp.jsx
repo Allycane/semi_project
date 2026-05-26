@@ -45,14 +45,13 @@ function SignUp() {
       }
 
       try {
-        const response = await axios.post('/api/signup', {
-          userId: formData.userId,
-          userName: formData.userName,
-          nickname: formData.nickname,
-          password: formData.password,
-          email: formData.email
+        const response = await axios.post('http://localhost:4000/signup', {
+          userId: formData.userId,    // 서버의 userId와 일치
+          password: formData.password,// 서버의 password와 일치
+          name: formData.userName,    // 서버의 name과 일치
+          email: formData.email       // 서버의 email과 일치
         });
-
+        
         if (response.status === 200 || response.status === 201) {
           alert("회원가입이 완료되었습니다!");
           navigate('/');
