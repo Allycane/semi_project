@@ -1,7 +1,18 @@
 import pool from "../DB/connection.js";
 
-//장바구니 아이템  삭제
 
+//장바구니 아이템 수량 변경
+export const getQtyUpdate = async (cid, qty ) => {
+  const sql = `
+    UPDATE cart
+    SET qty = qty + ?
+    WHERE cid = ?
+      AND qty + ? > 0
+  `;
+  const [rows] = await pool.execute(sql,[qty,cid,qty]);
+  return rows;
+};
+//장바구니 아이템  삭제
 export const deleteCartItems = async (cids) => {
   const sql = `
     DELETE FROM cart

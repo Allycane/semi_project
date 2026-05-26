@@ -2,7 +2,7 @@ import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import style from '../css/Cart.module.css';
 import { useEffect, useState } from 'react';
-import { getCartItems,deleteItems } from '../util/cart.js';
+import { getCartItems,deleteItems, updateItems } from '../util/cart.js';
 
 function Cart() {
   let category = "";
@@ -29,6 +29,11 @@ function Cart() {
   const handleDelete= async(cid)  => {
     await deleteItems([cid]);
     setCartItems(cartItems.filter(item => item.cid !== cid));
+  };
+
+  const handleUpdate= async(cid,qty)  => {
+    await updateItems({cid,qty});
+    setCartItems(cartItems.map(item => item.cid === cid ? { ...item, qty: item.qty + qty } : item));
   };
 
   return (
@@ -73,9 +78,13 @@ function Cart() {
                         </div>
                         <div className={style.btnbox}>
                           <div className={style.countBtn}>
-                            <button className={style.minus}>-</button>
+                            <button className={style.minus} onClick={() => handleUpdate(item.cid, -1)} disabled={item.qty <= 1}>
+                              -
+                            </button>
                             <input type="number" value={item.qty} readOnly className={style.inputNum} />
-                            <button className={style.plus}>+</button>
+                            <button className={style.plus} onClick={() => handleUpdate(item.cid, 1)}>
+                              +
+                            </button>
                           </div>
                           <div className={style.price}>
                             <div className={style.priceWrap}>

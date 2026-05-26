@@ -2,6 +2,14 @@ import * as repository from "../repository/carts.js";
 
 //장바구니 아이템 수량 변경
 
+export const updateItems= async(req,res,next)=>{
+  const {cid,qty}=req.body;
+  const result = await repository.getQtyUpdate(cid,qty);
+  res.json(
+    {message:"장바구니 아이템 수량이 변경되었습니다."}
+  );
+};
+
 //장바구니 아이템 삭제
 export const deleteItems = async (req, res) => {
   const { cids } = req.body;
