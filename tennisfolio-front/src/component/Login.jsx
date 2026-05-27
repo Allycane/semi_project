@@ -1,4 +1,7 @@
-import { useState, useRef } from "react";
+// 2026-05-27 : useEffect 추가
+import { useState, useRef, useEffect } from "react";
+//2026-05-27 :useLocation, useNavigate import 추가
+import { useLocation, useNavigate } from "react-router-dom";
 import { Nav, Form, Modal, Button } from "react-bootstrap";
 import { axiosPost } from "../util/dataAxios.js";
 import { useAuthStore } from "../../store/useAuthStore.js";
@@ -6,9 +9,38 @@ import { useAuthStore } from "../../store/useAuthStore.js";
 import "../css/Nav.css";
 
 function Login() {
+	// URL 경로 감시
+	const location = useLocation();
+	// URL 변경하기
+	const navigate = useNavigate();
+
 	const [show, setShow] = useState(false);
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
+	// 로딩 상태 추가
+	const [loading, setLoading] = useState(false);
+
+	// handleClose에 조건 추가
+	const handleClose = () => {
+		setShow(false);
+		// /login URL에서 모달 닫으면 이전 페이지로 돌아가기
+		if (location.pathname === "/login") {
+			navigate(-1);
+		}
+	};
+
+	//  handleShow에 navigate 추가
+	const handleShow = () => {
+		setShow(true);
+		// 모달 열 때 URL도 /login으로 변경
+		navigate("/login");
+	};
+
+	//  시작 - /login URL로 직접 접속 시 자동으로 모달 열기
+	useEffect(() => {
+		if (location.pathname === "/login") {
+			setShow(true);
+		}
+	}, [location.pathname]);
+	//  끝 - useEffect Hook
 
 	// [정예원] Ref로 빈칸 제출 확인
 	const idRef = useRef(null);
@@ -39,21 +71,34 @@ function Login() {
 			return;
 		}
 
-		const result = await axiosPost("/login", formData);
-		console.log("서버 응답:", result);
+		try {
+			// ✅ 추가됨: 로딩 상태 시작
+			setLoading(true);
 
-		if (result.isLogin) {
-			// [정예원] Zustand store에 로그인 정보 저장
-			login({
-				userId: formData.id,
-				role: result.role,
-				accessToken: result.token,
-				isLogin: result.isLogin,
-			});
-			handleClose();
-			setFormData({ id: "", pwd: "" });
-		} else {
-			alert("로그인에 실패하셨습니다.");
+			console.log("로그인 요청 시작:", formData);
+			const result = await axiosPost("/login", formData);
+			console.log("서버 응답:", result);
+
+			if (result && result.isLogin) {
+				// [정예원] Zustand store에 로그인 정보 저장
+				login({
+					userId: formData.id,
+					role: result.role,
+					accessToken: result.token,
+					isLogin: result.isLogin,
+				});
+				alert("로그인 되었습니다.");
+				handleClose();
+				setFormData({ id: "", pwd: "" });
+			} else {
+				const errorMsg = result?.message || "로그인에 실패하셨습니다.";
+				alert(errorMsg);
+				setFormData({ ...formData, pwd: "" }); // 비밀번호만 초기화
+			}
+		} catch (error) {
+			console.error("로그인 요청 실패:", error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -80,6 +125,7 @@ function Login() {
 								value={formData.id}
 								ref={idRef}
 								onChange={handleFormChange}
+								disabled={loading}
 							/>
 							<span style={{ color: "red", fontSize: "0.8rem" }}>
 								{errors.id}
@@ -95,6 +141,7 @@ function Login() {
 								value={formData.pwd}
 								ref={pwdRef}
 								onChange={handleFormChange}
+								disabled={loading}
 							/>
 							<span style={{ color: "red", fontSize: "0.8rem" }}>
 								{errors.pwd}
@@ -102,8 +149,8 @@ function Login() {
 						</Form.Group>
 
 						{/* [정예원] 버튼 타입 -> submit */}
-						<Button type="submit" className="loginBtn mt-4">
-							로그인
+						<Button type="submit" className="loginBtn mt-4" disabled={loading}>
+							{loading ? "로그인 중..." : "로그인"}
 						</Button>
 					</Form>
 

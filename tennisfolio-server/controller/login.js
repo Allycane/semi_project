@@ -6,7 +6,7 @@ export const getLogin = async (req, res, next) => {
 	const { id, pwd } = req.body;
 	const pwdHash = await repository.getPassword(id);
 
-	console.log(` 로그인 시도: 아이디=${id}, 비밀번호=${pwd}`);
+	// console.log(` 로그인 시도: 아이디=${id}, 비밀번호=${pwd}`);
 
 	try {
 		if (!pwdHash) {
@@ -18,7 +18,7 @@ export const getLogin = async (req, res, next) => {
 				//로그인 인증 - jwttoken
 				token = await jwt.sign({ id }, "secret", { expiresIn: "7d" });
 			}
-			console.log("token--> ", token);
+			// console.log("token--> ", token);
 
 			res.json({ isLogin, token, role: pwdHash.role });
 		}
