@@ -3,6 +3,7 @@ import cors from "cors";
 import cartRouter from "./routes/carts.js";
 import loginRouter from "./routes/login.js";
 import signupRouter from "./routes/signup.js";
+import productRouter from "./routes/products.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use("/carts", cartRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
+app.use('/products', productRouter);
 
 app.listen(4000, () => {
 	console.log(`Server is running on port 4000`);
