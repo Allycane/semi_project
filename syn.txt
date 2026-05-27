@@ -1,10 +1,12 @@
-구현 내용(장바구니)
+구현 내용(장바구니,Hot.jsx)
 
 장바구니 추가
 중복된 상품 있을 때 수량증가
 수량 +/-, 삭제 기능 추가.
 로그인 기능 없이 구현하여 user_id 고정값 
 사용 중 
+
+hotData axios 연동 
 
 
 구현해야할 내용.
@@ -17,10 +19,10 @@ X
 
 수정한 파일
 tennisfolio-front
-==> Cart.jsx,Detail.jsx
+==> Cart.jsx,Detail.jsx,hot.jsx
 
 tennisfolio-server
-==>repository/carts.js, controller/carts.js
+==>repository/carts.js,products.jsx, controller/carts.js,products.jsx
 
 db 
 ==> hot 테이블 삭제 후 best_product에 병합

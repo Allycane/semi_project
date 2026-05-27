@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import productHot from '../data/productHot.js';
 import Products from './Products.jsx';
 import { getHotProducts } from '../util/product.js';
 
 function Hot() {
-  let [tennisHot] = useState(productHot);
   let [clicked] = useState("hot");
   let [hotProducts, setHotProducts] = useState([]);
 
