@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cartRouter from "./routes/carts.js";
 import loginRouter from "./routes/login.js";
+import signupRouter from "./routes/signup.js";
+import productRouter from "./routes/products.js";
 import bestRouter from "./routes/best.js";
 import hotRouter from "./routes/hot.js";
 
@@ -12,6 +14,8 @@ app.use(cors());
 
 app.use("/carts", cartRouter);
 app.use("/login", loginRouter);
+app.use("/signup", signupRouter);
+app.use('/products', productRouter);
 app.use("/api/best", bestRouter);
 app.use("/api/hot", hotRouter);
 
