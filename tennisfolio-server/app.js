@@ -4,6 +4,10 @@ import cartRouter from "./routes/carts.js";
 import loginRouter from "./routes/login.js";
 import signupRouter from "./routes/signup.js";
 import styleRouter from "./routes/style.js";
+import productRouter from "./routes/products.js";
+import bestRouter from "./routes/best.js";
+import hotRouter from "./routes/hot.js";
+import cardListsRouter from "./routes/cardLists.js";
 
 const app = express();
 
@@ -13,7 +17,10 @@ app.use(cors());
 app.use("/carts", cartRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
-app.use('/style', styleRouter);
+app.use('/products', productRouter);
+app.use("/api/best", bestRouter);
+app.use("/api/hot", hotRouter);
+app.use("/cardLists", cardListsRouter);
 
 app.listen(4000, () => {
 	console.log(`Server is running on port 4000`);
