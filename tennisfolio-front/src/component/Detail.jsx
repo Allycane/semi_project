@@ -10,12 +10,13 @@ import bestwoman from '../data/bestwoman.js';
 import bestman from '../data/bestman.js';
 import bestacc from '../data/bestacc.js';
 import bestshoes from '../data/bestshoes.js';
-import review from '../data/review.js';
+// import review from '../data/review.js';
 
 import { addItem } from '../util/cart.js';
 import { useDispatch } from 'react-redux';
 
 import style from '../css/Detail.module.css';
+import { axiosGet, axiosPost } from '../util/dataAxios.js';
 
 function Detail() {
   const { id } = useParams();
@@ -27,6 +28,19 @@ function Detail() {
 
   let [tap, setTap] = useState(0);
   let [scrollActive, setScrollActive] = useState(false);
+
+  /**
+  const [productData, setProductData] = useState([]);
+  
+  useEffect(() => {
+      const fetchProductData = async() => {
+          const data = await axiosPost(`/detail/${id}`, {"" : ""});
+          console.log(data)
+          setProductData(data);
+        }
+      fetchProductData();
+    }, [])
+   */
 
   function multipath() {
     switch (pathname) {
@@ -289,31 +303,61 @@ function Star(props) {
 }
 
 function ReviewContent(props) {
-  let [count, setCount] = useState(0);
+  /*
   let [reviewData] = useState(review);
+  */
+  let [count, setCount] = useState(0);
+
+  const [reviewData, setReviewData] = useState([]);
+
+  useEffect(() => {
+    const fetchReview = async () => {
+      const fetchData = await axiosGet(`/detail/review`);
+      // console.log('review-------->', fetchData);
+      setReviewData(fetchData);
+    }
+    fetchReview();
+  }, [])
+
   return (
     <li className={style.reviewContent}>
       <div className={style.reviewLeft}>
-        <div className={style.imgbox}><img src="/img/profile_basic.svg" alt="profile" /></div>
+
+        <div className={style.imgbox}>
+          <img src="/img/profile_basic.svg" alt="profile" />
+        </div>
+
       </div>
+
       <div className={style.reviewRight}>
         <p className={style.product}>{props.thisItem.product}</p>
         <p className={style.option}>옵션1</p>
+
         <div className={style.ratingBox}>
-          <div className={style.ratingBase}><img src="/img/star_rating_base.svg" alt="starbase" /></div>
-          <div className={style.ratingFill} style={{ width: reviewData[props.num].percent }}>
+          <div className={style.ratingBase}>
+            <img src="/img/star_rating_base.svg" alt="starbase" />
+          </div>
+          <div className={style.ratingFill} style={{ width: reviewData.percent }}>
             <img src="/img/star_rating_fill.svg" alt="starfill" />
           </div>
-          <span>{reviewData[props.num].rating}</span>
+          <span>{reviewData.rating}</span>
         </div>
-        <p className={style.content}>{reviewData[props.num].text}</p>
+
+        <p className={style.content}>
+          {reviewData.text}
+        </p>
+
         <div className={style.btnbox}>
           <div className={style.thankBtn} onClick={() => setCount(count + 1)}>
             <i className="fa-solid fa-thumbs-up"></i>
             <span>감사요</span><span>{count}</span>
           </div>
-          <div className={style.reportBtn}><span>신고하기</span></div>
-          <div className={style.data}><span>{reviewData[props.num].date}</span></div>
+          <div className={style.reportBtn}>
+            <span>신고하기</span>
+          </div>
+          <div className={style.data}>
+            <span>{reviewData.date}</span>
+          </div>
         </div>
       </div>
     </li>

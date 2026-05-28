@@ -53,13 +53,25 @@ const BestPick = () => {
   }, [selectedCategoryId]);
 
   return (
-    <div className="container bestItem" style={{ margin: "150px auto 150px", maxWidth: "1600px" }}>
+    <div className="container bestItem" 
+      style={{ 
+        margin: "150px auto 150px", 
+        maxWidth: "1600px" 
+      }}>
       <div className="categoryMore">
         <h3>카테고리별 인기 아이템</h3>
         <p className="more"><a href="#home">더 많은 아이템 확인하기 +</a></p>
       </div>
 
-      <div className='categoryList' style={{display:"flex", justifyContent: "center", alignItems: "center", gap: "40px", margin: "60px 0 80px" , flexWrap: "wrap", border: 0}}>
+      <div className='categoryList' 
+        style={{
+          display:"flex", 
+          justifyContent: "center", 
+          alignItems: "center", 
+          gap: "40px", 
+          margin: "60px 0 80px" , 
+          flexWrap: "wrap", 
+          border: 0}}>
         {
           categories?.map((item) => (
             <button
@@ -69,7 +81,12 @@ const BestPick = () => {
                 selectedCategoryId === item.categoryId ? 'active' : ''
               }`}
               onClick={() => {setSelectedCategoryId(item.categoryId)}}
-              style={{padding: "20px", border: 0, borderRadius: "10px"}}
+              style={{
+                padding: "25px 30px", 
+                border: 0, 
+                borderRadius: "10px",
+                alignContent: 'center'
+              }}
             >
               <Category
                 categoryId={item.categoryId}

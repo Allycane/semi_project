@@ -6,6 +6,7 @@ import signupRouter from "./routes/signup.js";
 import productRouter from "./routes/products.js";
 import bestRouter from "./routes/best.js";
 import hotRouter from "./routes/hot.js";
+import detailRouter from "./routes/detail.js";
 import cardListsRouter from "./routes/cardLists.js";
 
 const app = express();
@@ -19,6 +20,7 @@ app.use("/signup", signupRouter);
 app.use('/products', productRouter);
 app.use("/api/best", bestRouter);
 app.use("/api/hot", hotRouter);
+app.use("/detail", detailRouter);
 app.use("/cardLists", cardListsRouter);
 
 app.listen(4000, () => {
