@@ -90,6 +90,14 @@ CREATE TABLE `best_product` (
 
 -- category_id=1 : 가방 (원 best_bag)
 INSERT INTO `best_product` VALUES
+(0, 8, 'img/hot/hot1.jpg', '컨셉트컬리지', '남여공용 테니스볼 애쉬그레이 맨투맨', '91,000', '', '', '', '["img/detail/hot_detail12.jpg"]'),
+(1, 8, 'img/hot/hot2.jpg', '윌슨', '윌슨 핑크 테니스 볼', '18,900', '6,100↓', '', '25,000', '["img/detail/hot_detail12.jpg"]'),
+(2, 8, 'img/hot/hot3.jpg', '논포멀하우스', 'Stretch cotton polo shirt (Pink)', '76,000', '', '', '', '["img/detail/hot_detail13.jpg"]'),
+(3, 8, 'img/hot/hot4.jpg', '러브포티', '테니스 크루 캡 Skyblue', '39,000', '', '', '', '["img/detail/hot_detail14.jpg"]'),
+(4, 8, 'img/hot/hot5.jpg', '르누쿠', '랩 반바지 Mustart', '239,000', '', '', '', '["img/detail/hot_detail15.jpg"]'),
+(5, 8, 'img/hot/hot6.png', '데이브앤데이즈', '반짚업 맨투맨 Navy', '139,000', '', '', '', '["img/detail/hot_detail16.jpg"]'),
+(6, 8, 'img/hot/hot7.jpg', 'FCMM', '테니스 클럽 클래식 맨투맨 Melange gray', '41,300', '17,700↓', '', '59,000', '["img/detail/hot_detail17.jpg"]'),
+(7, 8, 'img/hot/hot8.jpg', '나이키', '손목밴드 스우시 2개입 Pink', '13,300', '', '5%', '14,000', '["img/detail/hot_detail18.jpg"]'),
 (8,  1,'img/best/bag1.jpg',  '러브포티','퀄팅 라켓 백 Black',          '89,000',  '',        '', '',        '["img/detail/detail1.jpg"]'),
 (9,  1,'img/best/bag2.jpg',  '러브포티','퀄팅 라켓 토트백 Black',      '159,000', '',        '', '',        '["img/detail/detail2.jpg"]'),
 (10, 1,'img/best/bag3.jpg',  '러브포티','퀄팅 라켓 백팩 Navy',         '109,000', '',        '', '',        '["img/detail/detail3.jpg"]'),
@@ -157,33 +165,9 @@ INSERT INTO `best_product` VALUES
 
 -- ============================================================
 --  4. product_hot   ←  tennis_mall.productHot.js
+-- hot 테이블 삭제
 -- ============================================================
 DROP TABLE IF EXISTS `product_hot`;
-CREATE TABLE `product_hot` (
-  `id`      INT          NOT NULL,
-  `idx`     INT          NOT NULL,
-  `img_url` VARCHAR(255) NOT NULL,
-  `shop`    VARCHAR(100) NOT NULL,
-  `product` VARCHAR(255) NOT NULL,
-  `price`   VARCHAR(20)  NOT NULL,
-  `new`     TINYINT(1)   NOT NULL DEFAULT 0,
-  `dc`      VARCHAR(20)  NOT NULL DEFAULT '',
-  `per`     VARCHAR(10)  NOT NULL DEFAULT '',
-  `no_dc`   VARCHAR(20)  NOT NULL DEFAULT '',
-  `sub_img` JSON         NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `product_hot` VALUES
-(0,1,'img/hot/hot1.jpg','컨셉트컬리지','남여공용 테니스볼 애쉬그레이 맨투맨', '91,000',  0,'',        '',   '',       '["img/detail/hot_detail2.jpg"]'),
-(1,2,'img/hot/hot2.jpg','윌슨',        '윌슨 핑크 테니스 볼',                  '18,900',  1,'6,100↓', '',   '25,000', '["img/detail/hot_detail2.jpg"]'),
-(2,3,'img/hot/hot3.jpg','논포멀하우스','Stretch cotton polo shirt (Pink)',      '76,000',  1,'',        '',   '',       '["img/detail/hot_detail3.jpg"]'),
-(3,4,'img/hot/hot4.jpg','러브포티',    '테니스 크루 캡 Skyblue',               '39,000',  1,'',        '',   '',       '["img/detail/hot_detail4.jpg"]'),
-(4,5,'img/hot/hot5.jpg','르누쿠',      '랩 반바지 Mustart',                    '239,000', 1,'',        '',   '',       '["img/detail/hot_detail5.jpg"]'),
-(5,6,'img/hot/hot6.png','데이브앤데이즈','반짚업 맨투맨 Navy',                  '139,000', 1,'',        '',   '',       '["img/detail/hot_detail6.jpg"]'),
-(6,7,'img/hot/hot7.jpg','FCMM',        '테니스 클럽 클래식 맨투맨 Melange gray','41,300',  1,'17,700↓','',   '59,000', '["img/detail/hot_detail7.jpg"]'),
-(7,8,'img/hot/hot8.jpg','나이키',      '손목밴드 스우시 2개입 Pink',           '13,300',  1,'',        '5%', '14,000', '["img/detail/hot_detail8.jpg"]');
-
 
 -- ============================================================
 --  5. cart   ←  shoppy.cart
@@ -193,7 +177,7 @@ INSERT INTO `product_hot` VALUES
 DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `cid`   INT          NOT NULL AUTO_INCREMENT,
-  `size`  CHAR(2)      NOT NULL,
+  `size`  CHAR(50)      NOT NULL,
   `qty`   INT          NOT NULL,
   `pid`   INT          NOT NULL COMMENT 'best_product.id',
   `id`    VARCHAR(50)  NOT NULL COMMENT 'member.id',
@@ -484,6 +468,8 @@ JOIN (
 
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+select * from 
 
 -- ============================================================
 --  END OF DUMP
