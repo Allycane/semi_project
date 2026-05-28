@@ -1,5 +1,16 @@
 import { axiosPost,axiosGet } from "./dataAxios.js";
 
+
+/**
+ * 상품 총 금액 구하기
+ */
+export function getTotalPrice(cartItems) {
+  return (cartItems ?? []).reduce((total, item) => {
+    const price = Number(String(item.price).replaceAll(",", ""));
+    return total + price * item.qty;
+  }, 0);
+}
+
 //장바구니 아이템 수량변경
 export const updateItems=async({cid,qty})=>{
     const result=await axiosPost("/carts/update",{cid,qty});

@@ -2,19 +2,19 @@ import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import style from '../css/Cart.module.css';
 import { useEffect, useState } from 'react';
-import { getCartItems,deleteItems, updateItems } from '../util/cart.js';
+import { getCartItems,deleteItems, updateItems, getTotalPrice } from '../util/cart.js';
 import { useAuthStore } from '../../store/useAuthStore.js';
+import {useNavigate} from 'react-router-dom';
+
 
 function Cart() {
   let category = "";
   let index = 0;
   const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate();
   const userId = useAuthStore((s) => s.userId);
 
-  const totalArr = cartItems.map((item) => Number(item.price.replaceAll(",", "")) * item.qty);
-  let totalPrice = 0;
-  totalArr.forEach((item) => { totalPrice += item; });
-  
+  const totalPrice = getTotalPrice(cartItems);
 
   let sign = { margin: "0 10px", fontWeight: "700", fontSize: "15px", color: "#888" };
 
@@ -126,7 +126,13 @@ function Cart() {
                 <span>{`${totalPrice.toLocaleString()} 원`}</span>
               </div>
             </div>
-            <Button className={`btn btn-primary ${style.buyBtn}`}>결제하기</Button>
+            <Button
+              className={`btn btn-primary ${style.buyBtn}`}
+              onClick={() => navigate('/checkout',              
+              )}
+            >
+              결제하기
+            </Button>
           </div>
         </div>
       </div>

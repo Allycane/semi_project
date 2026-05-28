@@ -15,6 +15,7 @@ import Best from "./BestPick.jsx";
 import CardList from "./CardList.jsx";
 import Detail from "./Detail.jsx";
 import Cart from "./Cart.jsx";
+import Checkout from "./Checkout.jsx";
 
 import "../css/Nav.css";
 
@@ -194,6 +195,7 @@ function NavGroup() {
 				<Route path="/detail/best/acc/:id" element={<Detail />} />
 				<Route path="/detail/best/shoes/:id" element={<Detail />} />
 				<Route path="/cart" element={<Cart />} />
+				<Route path="/checkout" element={<Checkout />} />
 				{/* cardLists 부분 수정했습니다. 2026-05-27 */}
 				<Route
 					path="/cardLists"
