@@ -1,22 +1,9 @@
-// import express from "express";
+import pool from "../DB/connection.js";
 
-// const router = express.Router();
-
-// router.get("/", (req, res, next) => {
-// 	try {
-// 		res.json({ success: true });
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// });
-
-// export default router;
-
-import express from "express";
-import * as controller from "../controller/cardLists.js";
-
-const router = express.Router();
-
-router.get("/", controller.getCardLists);
-
-export default router;
+export const getCardLists = async () => {
+	// carddata 테이블에서 전체 데이터 조회
+	// 테이블명은 DB에서 확인 후 맞게 수정해주세요
+	const sql = `SELECT * FROM card_data`;
+	const [rows] = await pool.execute(sql);
+	return rows;
+};
