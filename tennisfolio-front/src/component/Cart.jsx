@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import style from '../css/Cart.module.css';
 import { useEffect, useState } from 'react';
 import { getCartItems,deleteItems, updateItems } from '../util/cart.js';
+import { useAuthStore } from '../../store/useAuthStore.js';
 
 function Cart() {
   let category = "";
   let index = 0;
   const [cartItems, setCartItems] = useState([]);
+  const userId = useAuthStore((s) => s.userId);
 
   const totalArr = cartItems.map((item) => Number(item.price.replaceAll(",", "")) * item.qty);
   let totalPrice = 0;
@@ -19,7 +21,7 @@ function Cart() {
   useEffect(() => {
     // 장바구니 아이템을 서버에서 가져오는 로직
     const axiosCartItems = async () => {
-      const result = await getCartItems("hong");
+      const result = await getCartItems(userId);
       setCartItems(result);
     };
 

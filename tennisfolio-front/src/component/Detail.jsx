@@ -1,6 +1,7 @@
 import { Button, Nav, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import {useAuthStore} from '../../store/useAuthStore.js';
 
 import productHot from '../data/productHot.js';
 import bestbag from '../data/bestbag.js';
@@ -149,6 +150,9 @@ function Price(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
+  const userId = useAuthStore((s) => s.userId);
+  const isLogin = useAuthStore((s) => s.isLogin);
+
   function totalPrice() {
     let total = Number(basket.price.replace(",", "")) * count;
     return total.toLocaleString();
@@ -173,16 +177,40 @@ function Price(props) {
         <span className={style.totalBig}>{totalPrice()}원</span>
       </div>
       <div className={style.buttonBox}>
-        <Button variant="secondary" className={style.grayBtn}>바로구매</Button>{' '}
+        <Button
+          variant="secondary"
+          className={style.grayBtn}
+          onClick={() => {
+            if (!isLogin) {
+              alert("로그인이 필요합니다.");
+              return;
+            }
+
+            // 바로구매 로직 있으면 여기 작성
+          }}
+        >
+          바로구매
+        </Button>{' '}
         <Button
           variant="secondary"
           className={style.purpleBtn}
           onClick={() => {
+            if (!isLogin) {
+              alert("로그인이 필요합니다.");
+              return;
+            }
+
             setShow(true);
-            //장바구니 상품 추가 
-            addItem({pid: props.thisItem.id, size: "Free", qty: count, userId: "hong"});
+            addItem({
+              pid: props.thisItem.id,
+              size: "Free",
+              qty: count,
+              userId:userId
+            });
           }}
-        >장바구니</Button>{' '}
+        >
+          장바구니
+        </Button>{' '}
 
         <Modal show={show} onHide={handleClose} className={style.cartModal} centered>
           <Modal.Body>

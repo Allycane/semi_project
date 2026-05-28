@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Nav, Form, Modal, Button } from "react-bootstrap";
 import { axiosPost } from "../util/dataAxios.js";
 import { useAuthStore } from "../../store/useAuthStore.js";
+import { useNavigate } from "react-router-dom";
 
 import "../css/Nav.css";
 
@@ -9,6 +10,7 @@ function Login() {
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+	const navigate = useNavigate();
 
 	// [정예원] Ref로 빈칸 제출 확인
 	const idRef = useRef(null);
@@ -50,6 +52,7 @@ function Login() {
 				accessToken: result.token,
 				isLogin: result.isLogin,
 			});
+			navigate("/"); // 로그인 성공 후 홈으로 이동
 			handleClose();
 			setFormData({ id: "", pwd: "" });
 		} else {

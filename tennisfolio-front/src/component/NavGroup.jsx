@@ -24,6 +24,8 @@ function NavGroup() {
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
+	const [loginShow, setLoginShow] = useState(false); // 로그인 모달
+	const handleLoginClose = () => setLoginShow(false);
 
 	const isLogin = useAuthStore((s) => s.isLogin);
 	const userId = useAuthStore((s) => s.userId);
@@ -40,6 +42,7 @@ function NavGroup() {
 	const handleLogout = () => {
 		logout();
 		alert("로그아웃 되었습니다.");
+		navigate("/");
 	};
 
 	return (
@@ -128,9 +131,11 @@ function NavGroup() {
 						<Nav.Link onClick={() => setIsClicked(!isClicked)}>
 							<i className="fa-solid fa-magnifying-glass"></i>
 						</Nav.Link>
-						<Nav.Link onClick={() => navigate("/cart")}>
-							<i className="fa-solid fa-cart-shopping"></i>
-						</Nav.Link>
+						{isLogin && (
+  <Nav.Link onClick={() => navigate("/cart")}>
+    <i className="fa-solid fa-cart-shopping"></i>
+  </Nav.Link>
+)}
 						<Nav.Link onClick={handleShow}>
 							<i className="fa-solid fa-bars"></i>
 						</Nav.Link>
