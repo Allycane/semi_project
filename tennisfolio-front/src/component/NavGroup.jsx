@@ -15,6 +15,7 @@ import Best from "./BestPick.jsx";
 import CardList from "./CardList.jsx";
 import Detail from "./Detail.jsx";
 import Cart from "./Cart.jsx";
+import Checkout from "./Checkout.jsx";
 
 import "../css/Nav.css";
 
@@ -25,7 +26,9 @@ function NavGroup() {
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
 	const [showSignUp, setShowSignUp] = useState(false);
-    const handleCloseSignUp = () => setShowSignUp(false);
+  const handleCloseSignUp = () => setShowSignUp(false);
+	const [loginShow, setLoginShow] = useState(false); // 로그인 모달
+	const handleLoginClose = () => setLoginShow(false);
 
 	const isLogin = useAuthStore((s) => s.isLogin);
 	const userId = useAuthStore((s) => s.userId);
@@ -42,6 +45,7 @@ function NavGroup() {
 	const handleLogout = () => {
 		logout();
 		alert("로그아웃 되었습니다.");
+		navigate("/");
 	};
 
 	return (
@@ -130,9 +134,11 @@ function NavGroup() {
 						<Nav.Link onClick={() => setIsClicked(!isClicked)}>
 							<i className="fa-solid fa-magnifying-glass"></i>
 						</Nav.Link>
-						<Nav.Link onClick={() => navigate("/cart")}>
-							<i className="fa-solid fa-cart-shopping"></i>
-						</Nav.Link>
+						{isLogin && (
+  <Nav.Link onClick={() => navigate("/cart")}>
+    <i className="fa-solid fa-cart-shopping"></i>
+  </Nav.Link>
+)}
 						<Nav.Link onClick={handleShow}>
 							<i className="fa-solid fa-bars"></i>
 						</Nav.Link>
@@ -191,6 +197,7 @@ function NavGroup() {
 				<Route path="/detail/best/acc/:id" element={<Detail />} />
 				<Route path="/detail/best/shoes/:id" element={<Detail />} />
 				<Route path="/cart" element={<Cart />} />
+				<Route path="/checkout" element={<Checkout />} />
 				{/* cardLists 부분 수정했습니다. 2026-05-27 */}
 				<Route
 					path="/cardLists"
