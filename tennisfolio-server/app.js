@@ -3,6 +3,7 @@ import cors from "cors";
 import cartRouter from "./routes/carts.js";
 import loginRouter from "./routes/login.js";
 import signupRouter from "./routes/signup.js";
+import styleRouter from "./routes/style.js";
 import productRouter from "./routes/products.js";
 import bestRouter from "./routes/best.js";
 import hotRouter from "./routes/hot.js";
@@ -20,6 +21,7 @@ app.use('/products', productRouter);
 app.use("/api/best", bestRouter);
 app.use("/api/hot", hotRouter);
 app.use("/cardLists", cardListsRouter);
+app.use("/style", styleRouter);
 
 app.listen(4000, () => {
 	console.log(`Server is running on port 4000`);

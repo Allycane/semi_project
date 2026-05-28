@@ -25,6 +25,8 @@ function NavGroup() {
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
+	const [showSignUp, setShowSignUp] = useState(false);
+  const handleCloseSignUp = () => setShowSignUp(false);
 	const [loginShow, setLoginShow] = useState(false); // 로그인 모달
 	const handleLoginClose = () => setLoginShow(false);
 
@@ -68,11 +70,11 @@ function NavGroup() {
 							<>
 								<Login />
 								<Nav.Link
-									className="loginLink"
-									onClick={() => navigate("/signup")}
-								>
-									회원가입
-								</Nav.Link>
+                                    className="loginLink"
+                                    onClick={() => setShowSignUp(true)}
+                                >
+                                    회원가입
+                                </Nav.Link>
 							</>
 						)}
 						<Nav.Link href="#" className="loginLink">
@@ -140,7 +142,7 @@ function NavGroup() {
 						<Nav.Link onClick={handleShow}>
 							<i className="fa-solid fa-bars"></i>
 						</Nav.Link>
-						<Menu show={show} handleClose={handleClose} />
+						<Menu show={show} handleClose={handleClose} handleShowSignUp={() => setShowSignUp(true)} />
 					</Navbar>
 				</Container>
 			</Navbar>
@@ -203,9 +205,8 @@ function NavGroup() {
 						<CardListPage isClicked={isClicked} setIsClicked={setIsClicked} />
 					}
 				/>
-				{/* [회원가입] 회원가입 페이지 라우트 등록 */}
-				<Route path="/signup" element={<SignUp />} />
 			</Routes>
+			<SignUp show={showSignUp} handleClose={handleCloseSignUp} />
 		</>
 	);
 }

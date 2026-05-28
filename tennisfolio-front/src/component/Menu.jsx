@@ -1,4 +1,5 @@
 import { Offcanvas, CloseButton } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function Menu(props) {
   return (
@@ -31,7 +32,15 @@ function Menu(props) {
         </ul>
         <ul className="loginMenu">
           <li>로그인</li>
-          <li>회원가입</li>
+          <li 
+            style={{ cursor: 'pointer', color: 'white' }} 
+            onClick={() => {
+              props.handleClose();        
+              props.handleShowSignUp();   
+            }}
+          >
+            회원가입
+          </li>
           <li>고객센터</li>
         </ul>
       </Offcanvas.Body>

@@ -13,6 +13,6 @@ const pool = mysql.createPool({
 pool
 	.getConnection()
 	.then((conn) => console.log("✅ mysql 연결 성공")) // 요청이 성공했을 경우 실행이 되는 구문
-	.catch((err) => console.log("❌ mysql 연결 실패")); // 서버가 닫혀있거나, 비번이 틀렸을 ... 경우 실행 되는 구문
+	.catch((err) => console.log("❌ mysql 연결 실패", err)); // 서버가 닫혀있거나, 비번이 틀렸을 ... 경우 실행 되는 구문
 
 export default pool;
