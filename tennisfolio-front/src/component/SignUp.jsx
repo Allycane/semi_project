@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/Nav.css';
 
-function SignUp() {
+function SignUp({ show, handleClose }) {
   const navigate = useNavigate();
 
   const [checked1, setChecked1] = useState(false);
@@ -18,7 +18,26 @@ function SignUp() {
     password: '',
     confirmPassword: '',
     email: ''
-  });
+  })
+  
+  const resetForm = () => {
+    setView(true); 
+    setChecked1(false);
+    setChecked2(false);
+    setFormData({
+      userId: '', 
+      userName: '', 
+      nickname: '',
+      password: '', 
+      confirmPassword: '', 
+      email: ''
+    });
+  };
+
+  const handleCloseWithReset = () => {
+    resetForm(); 
+    handleClose();
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,14 +65,15 @@ function SignUp() {
 
       try {
         const response = await axios.post('http://localhost:4000/signup', {
-          userId: formData.userId,    // 서버의 userId와 일치
-          password: formData.password,// 서버의 password와 일치
-          name: formData.userName,    // 서버의 name과 일치
-          email: formData.email       // 서버의 email과 일치
+          userId: formData.userId,
+          password: formData.password,
+          name: formData.userName,
+          email: formData.email
         });
         
         if (response.status === 200 || response.status === 201) {
           alert("회원가입이 완료되었습니다!");
+          handleClose();
           navigate('/');
         }
       } catch (error) {
@@ -64,23 +84,27 @@ function SignUp() {
   };
 
   return (
-    <div className='signup-wrap'>
-      <div className="signup-page-container">
-        <Form onSubmit={handleNextOrSubmit}>
+    <Modal show={show} onHide={handleCloseWithReset} centered size='lg'>
+      <Modal.Header closeButton>
+        <Modal.Title>회원가입</Modal.Title>
+      </Modal.Header>
+      <Form onSubmit={handleNextOrSubmit}>
+        <Modal.Body>
           <div className="signup-body">
             {view === true
               ? <Step1 checked1={checked1} setChecked1={setChecked1} checked2={checked2} setChecked2={setChecked2} />
               : <Step2 formData={formData} handleChange={handleChange} />
             }
           </div>
-          <div className="signup-footer">
-            <Button type="submit" className="nextBtn">
-              {view === true ? "다음" : "가입하기"}
-            </Button>
-          </div>
-        </Form>
-      </div>
-    </div>  
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseWithReset}>취소</Button>
+          <Button type="submit" className="nextBtn">
+            {view === true ? "다음" : "가입하기"}
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
   );
 }
 
@@ -127,28 +151,28 @@ function Step2({ formData, handleChange }) {
       <div className="signUp">
         <Form.Group>
           <Form.Label>아이디<span>*</span></Form.Label>
-          <Form.Control required type="text" name="userId" value={formData.userId} onChange={handleChange} />
+          <Form.Control required type="text" name="userId" value={formData.userId} onChange={handleChange} autoComplete="username" />
         </Form.Group>
         <Form.Group>
           <Form.Label>이름<span>*</span></Form.Label>
-          <Form.Control required type="text" name="userName" value={formData.userName} onChange={handleChange} />
+          <Form.Control required type="text" name="userName" value={formData.userName} onChange={handleChange} autoComplete="name" />
         </Form.Group>
         <Form.Group>
           <Form.Label>닉네임<span>*</span></Form.Label>
-          <Form.Control required type="text" name="nickname" value={formData.nickname} onChange={handleChange} />
+          <Form.Control required type="text" name="nickname" value={formData.nickname} onChange={handleChange} autoComplete="nickname" />
         </Form.Group>
         <Form.Group className="pw">
           <Form.Label>비밀번호<span>*</span></Form.Label>
-          <Form.Control required type="password" name="password" value={formData.password} onChange={handleChange} />
-          <p className="rule">영어, 숫자, 특수문자 중 2가지를 포함한 8자리 이상</p>
+          <Form.Control required type="password" name="password" value={formData.password} onChange={handleChange} autoComplete="new-password" />
+          <p className="rule">영어, 숫자, 특수문자를 포함한 8자리 이상</p>
         </Form.Group>
         <Form.Group>
           <Form.Label>비밀번호 확인<span>*</span></Form.Label>
-          <Form.Control required type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
+          <Form.Control required type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} autoComplete="new-password" />
         </Form.Group>
         <Form.Group>
           <Form.Label>이메일<span>*</span></Form.Label>
-          <Form.Control required type="email" name="email" value={formData.email} onChange={handleChange} />
+          <Form.Control required type="email" name="email" value={formData.email} onChange={handleChange} autoComplete="email" />
         </Form.Group>
       </div>
     </>

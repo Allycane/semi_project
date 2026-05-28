@@ -21,6 +21,7 @@ app.use('/products', productRouter);
 app.use("/api/best", bestRouter);
 app.use("/api/hot", hotRouter);
 app.use("/cardLists", cardListsRouter);
+app.use("/style", styleRouter);
 
 app.listen(4000, () => {
 	console.log(`Server is running on port 4000`);
