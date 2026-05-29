@@ -244,6 +244,20 @@ function Price(props) {
             }
 
             // 바로구매 로직 있으면 여기 작성
+            navigate('/checkout', {
+                state: {
+                  type: 'direct',
+                  item: {
+                    pid: basket.id,
+                    name: basket.product,
+                    image: basket.imgUrl,
+                    info: basket.shop,
+                    price: basket.price,
+                    qty: count,
+                    size: 'Free',
+                  },
+                },
+              });
             
           }}
         >
