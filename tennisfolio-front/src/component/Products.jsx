@@ -11,7 +11,9 @@ const Products = ({id, categoryId, imgUrl, shop, product, price, dc, per, nodc})
     7: 'shoes'
   };
 
-  const linkTo = categoryId === 8 ? `/detail/hot/${id}` : `/detail/best/${CATEGORY_SLUG[categoryId]}/${id}`;
+  const linkTo = categoryId === 8 
+      ? `/detail/hot/${id}` 
+      : `/detail/best/${CATEGORY_SLUG[Number(categoryId)]}/${id}`;
 
   // console.log('categoryId:', categoryId);           // 추가
   // console.log('CATEGORY_SLUG 결과:', CATEGORY_SLUG[categoryId]); // 추가

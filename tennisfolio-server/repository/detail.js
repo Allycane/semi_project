@@ -28,8 +28,7 @@ export const getReview = async() => {
 /**
  * HOT 상품 상세 조회
  */
-export const getHotDetail = async(index) => {
-    const offset = parseInt(index, 10);
+export const getHotDetail = async(productId) => {
     const sql = `SELECT
                     id,
                     category_id AS categoryId,
@@ -43,21 +42,18 @@ export const getHotDetail = async(index) => {
                     sub_img     AS subImg
                 FROM best_product
                 WHERE category_id = 8
-                ORDER BY id
-                LIMIT 1 OFFSET ${offset}
+                AND id = ${productId}
                 `;
-    const [rows] = await pool.execute(sql, [offset]);
+    const [rows] = await pool.execute(sql, []);
     return rows[0] ?? null;
 }
 
 /**
  * BEST 카테고리 상품 상세 조회
  */
-export const getBestDetail = async(subCategory, index) => {
+export const getBestDetail = async(subCategory, productId) => {
     const categoryId = CATEGORY_MAP[subCategory];
     if (!categoryId) return null;
-
-    const offset = parseInt(index, 10);
 
     const sql = `SELECT
                     id,
@@ -72,8 +68,7 @@ export const getBestDetail = async(subCategory, index) => {
                     sub_img     AS subImg
                 FROM best_product
                 WHERE category_id = ${categoryId}
-                ORDER BY id
-                LIMIT 1 OFFSET ${offset}
+                AND id = ${productId};
                 `;
     const [rows] = await pool.execute(sql, []);
     return rows[0] ?? null;
