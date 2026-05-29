@@ -9,7 +9,7 @@ import bestRouter from "./routes/best.js";
 import hotRouter from "./routes/hot.js";
 import detailRouter from "./routes/detail.js";
 import cardListsRouter from "./routes/cardLists.js";
-
+import kakaoRouter from "./routes/kakao.js";
 const app = express();
 
 app.use(express.json());
@@ -24,6 +24,7 @@ app.use("/api/hot", hotRouter);
 app.use("/detail", detailRouter);
 app.use("/cardLists", cardListsRouter);
 app.use("/style", styleRouter);
+app.use("/kakao",kakaoRouter);
 
 app.listen(4000, () => {
 	console.log(`Server is running on port 4000`);
