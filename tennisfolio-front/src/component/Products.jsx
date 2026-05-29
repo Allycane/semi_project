@@ -1,7 +1,21 @@
 import { Link } from 'react-router-dom';
 
 const Products = ({id, categoryId, imgUrl, shop, product, price, dc, per, nodc}) => {
-  const linkTo = categoryId === 8 ? `/detail/hot/${id}` : `/detail/best/${id}`;
+  const CATEGORY_SLUG = {
+    1: 'bag',
+    2: 'item',
+    3: 'racquet',
+    4: 'woman',
+    5: 'man',
+    6: 'acc',
+    7: 'shoes'
+  };
+
+  const linkTo = categoryId === 8 ? `/detail/hot/${id}` : `/detail/best/${CATEGORY_SLUG[categoryId]}/${id}`;
+
+  // console.log('categoryId:', categoryId);           // 추가
+  // console.log('CATEGORY_SLUG 결과:', CATEGORY_SLUG[categoryId]); // 추가
+  // console.log('linkTo:', linkTo);                   // 추가
 
   return (
     <div className='col'>
