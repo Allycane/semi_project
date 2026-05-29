@@ -1,17 +1,7 @@
 import { Button, Nav, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import {useAuthStore} from '../../store/useAuthStore.js';
-
-import productHot from '../data/productHot.js';
-import bestbag from '../data/bestbag.js';
-import besttennis from '../data/besttennis.js';
-import bestracquet from '../data/bestracquet.js';
-import bestwoman from '../data/bestwoman.js';
-import bestman from '../data/bestman.js';
-import bestacc from '../data/bestacc.js';
-import bestshoes from '../data/bestshoes.js';
-// import review from '../data/review.js';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../store/useAuthStore.js';
 
 import { addItem } from '../util/cart.js';
 import { useDispatch } from 'react-redux';
@@ -19,69 +9,81 @@ import { useDispatch } from 'react-redux';
 import style from '../css/Detail.module.css';
 import { axiosGet, axiosPost } from '../util/dataAxios.js';
 
-function Detail() {
-  const { id } = useParams();
-  const location = useLocation();
-  let pathname = location.pathname.split("/")[3];
-  let [multi, setMulti] = useState(bestbag);
-  let [like, setLike] = useState(0);
-  let thisItem = multi[Number(id)];
+export const Detail = () => {
+  const { category, subCategory, id } = useParams();
 
-  let [tap, setTap] = useState(0);
-  let [scrollActive, setScrollActive] = useState(false);
+  const [thisItem, setThisItem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  /**
-  const [productData, setProductData] = useState([]);
-  
+  const [like, setLike] = useState(0);
+  const [tap, setTap] = useState(0);
+  const [scrollActive, setScrollActive] = useState(false);
+
   useEffect(() => {
-      const fetchProductData = async() => {
-          const data = await axiosPost(`/detail/${id}`, {"" : ""});
-          console.log(data)
-          setProductData(data);
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        // hot -> GET '/detail/hot/:id
+        // best -> GET '/detail/best/:subCategory/:id (/detail/best/bag/0)
+        let endpoint = '';
+        if (category === 'hot') {
+          endpoint = `/detail/hot/${id}`;
         }
-      fetchProductData();
-    }, [])
-   */
+        else {
+          endpoint = `/detail/best/${subCategory}/${id}`;
+        }
 
-  function multipath() {
-    switch (pathname) {
-      case "bag":     return setMulti(bestbag);
-      case "item":    return setMulti(besttennis);
-      case "racquet": return setMulti(bestracquet);
-      case "woman":   return setMulti(bestwoman);
-      case "man":     return setMulti(bestman);
-      case "acc":     return setMulti(bestacc);
-      case "shoes":   return setMulti(bestshoes);
-      default:        return setMulti(productHot);
+        // console.log('category:', category);        
+        // console.log('subCategory:', subCategory);  
+        // console.log('id:', id);                    
+        // console.log('endpoint:', endpoint);
+
+        const data = await axiosGet(endpoint);
+        setThisItem(data);
+      }
+      catch (error) {
+        console.error('상품 상세 조회 실패 : ', error);
+      }
+      finally {
+        setLoading(false);
+      }
     }
-  }
+
+    fetchProduct();
+    window.scrollTo(0, 0);
+  }, [category, subCategory, id]);
 
   useEffect(() => {
-    function scrollFixed() {
+    const scrollFixed = () => {
       const position = window.scrollY;
       if (window.innerWidth > 1400) {
         setScrollActive(position > 1050);
-      } else {
+      }
+      else {
         setScrollActive(false);
       }
     }
-    window.addEventListener("scroll", scrollFixed);
-    return () => window.removeEventListener("scroll", scrollFixed);
-  });
-
-  useEffect(() => {
-    multipath();
-    window.scrollTo(0, 0);
+    window.addEventListener('scroll', scrollFixed);
+    return () => window.removeEventListener('scroll', scrollFixed);
   }, []);
 
+  if (loading) return <div
+    style={{textAlign : 'center'}}
+  >불러오는 중...</div>;
   if (!thisItem) return null;
 
   return (
-    <div style={{ background: "#f5f6f7" }}>
-      <div className="container" style={{ padding: "50px" }}>
+    <div 
+      style={{ 
+        background: "#f5f6f7" 
+      }}>
+      <div 
+        className="container" 
+        style={{ padding: "50px" }}>
         <div className="row">
           {/* 왼쪽 */}
-          <div className="col-xl-7 col-md-12" style={{ padding: "20px" }}>
+          <div className="col-xl-7 col-md-12" 
+            style={{ padding: "20px" }}>
             <div className="ThumbImg">
               <div className={style.mainImg}>
                 <img src={"/" + thisItem.imgUrl} alt="thumbimg" />
@@ -91,11 +93,12 @@ function Detail() {
               </div>
             </div>
           </div>
+
           {/* 오른쪽 */}
           <div className="col-xl-5 col-md-12" style={{ padding: "20px 50px" }}>
             <div className={style.detailTop}>
               <span className={style.brand}>{thisItem.shop}</span>
-              <p className={style.product}>{thisItem.product}</p>
+              <p className={style.product}>{thisItem.product || thisItem.name}</p>
             </div>
             <div className={style.price}>
               <p>{thisItem.price}</p>
@@ -115,11 +118,23 @@ function Detail() {
       </div>
 
       {/* 탭 네비게이션 */}
-      <div className={`container-fluid ${scrollActive ? style.fixedLeft : ""}`} style={{ height: "92px", background: "#fff" }}>
+      <div 
+        className={`container-fluid ${scrollActive ? style.fixedLeft : ""}`} 
+        style={{ 
+          height: "92px", 
+          background: "#fff" 
+        }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-xl-9">
-              <div style={{ padding: "50px 50px 0", background: "#fff" }} className="detailTab">
+              <div 
+                style={{ 
+                  padding: "50px 50px 0", 
+                  background: "#fff" 
+                }} 
+                className="detailTab"
+                >
                 <Nav variant="tabs" defaultActiveKey="link0">
                   <Nav.Item>
                     <Nav.Link onClick={() => { setTap(0); window.scrollTo(0, 1000); }} eventKey="link0">상세정보</Nav.Link>
@@ -142,10 +157,16 @@ function Detail() {
 
       {/* 상품 콘텐츠 */}
       <div className="container-fluid">
-        <div className="container-fluid" style={{ background: "#fff" }}>
+        <div className="container-fluid" 
+          style={{ 
+            background: "#fff" 
+          }}>
           <div className="container">
             <div className="row">
-              <div className="col-xl-9" style={{ padding: "50px" }}>
+              <div className="col-xl-9" 
+                style={{ 
+                  padding: "50px" 
+                }}>
                 <TabContent tap={tap} thisItem={thisItem} />
               </div>
             </div>
@@ -157,10 +178,10 @@ function Detail() {
 }
 
 function Price(props) {
-  let [count, setCount] = useState(1);
-  let dispatch = useDispatch();
-  let basket = props.thisItem;
-  let navigate = useNavigate();
+  const [count, setCount] = useState(1);
+  const dispatch = useDispatch();
+  const basket = props.thisItem;
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
@@ -168,7 +189,12 @@ function Price(props) {
   const isLogin = useAuthStore((s) => s.isLogin);
 
   function totalPrice() {
-    let total = Number(basket.price.replace(",", "")) * count;
+    const numericPrice = Number(basket.price.toString().replace(/,/g, ''));
+    if (!basket.price) return '0';
+
+    console.log('price:', basket.price, typeof basket.price);
+
+    const total = numericPrice * count;
     return total.toLocaleString();
   }
 
@@ -177,19 +203,36 @@ function Price(props) {
       <div className={style.detailSelect}>
         <div className={style.optionBox}>
           <div className={style.count}>
-            <button className={style.leftBtn} onClick={() => count > 1 ? setCount(count - 1) : setCount(1)}>-</button>
-            <input type="number" value={count} onChange={(e) => setCount(Number(e.target.value))} title="totalCount" className={style.inputNum} />
-            <button className={style.rightBtn} onClick={() => setCount(count + 1)}>+</button>
+            
+            <button 
+              className={style.leftBtn} 
+              onClick={() => count > 1 ? setCount(count - 1) : setCount(1)}>-
+            </button>
+            <input 
+              type="number" 
+              value={count} 
+              onChange={(e) => setCount(Number(e.target.value))} 
+              title="totalCount" 
+              className={style.inputNum} 
+            />
+            <button 
+              className={style.rightBtn} 
+              onClick={() => setCount(count + 1)}>+
+            </button>
+
           </div>
+
           <div className={style.total}>
             <span>{totalPrice()}</span>
           </div>
         </div>
       </div>
+
       <div className={style.totalBox}>
         <span className={style.totalTit}>총 상품 금액</span>
         <span className={style.totalBig}>{totalPrice()}원</span>
       </div>
+
       <div className={style.buttonBox}>
         <Button
           variant="secondary"
@@ -206,6 +249,7 @@ function Price(props) {
         >
           바로구매
         </Button>{' '}
+
         <Button
           variant="secondary"
           className={style.purpleBtn}
@@ -216,25 +260,34 @@ function Price(props) {
             }
 
             setShow(true);
-            addItem({
-              pid: props.thisItem.id,
-              size: "Free",
+            dispatch(addItem({
+              pid: basket.id,
+              size: 'Free',
               qty: count,
-              userId:userId
-            });
+              userId: userId
+            }));
           }}
         >
           장바구니
         </Button>{' '}
 
-        <Modal show={show} onHide={handleClose} className={style.cartModal} centered>
+        <Modal 
+          show={show} 
+          onHide={handleClose} 
+          className={style.cartModal} centered
+        >
           <Modal.Body>
             <div className={style.cartModalTit}>
               <i className="fa-solid fa-cart-shopping"></i>
               <p>{`선택하신 상품이\n 장바구니에 추가되었습니다.`}</p>
             </div>
             <div className={style.cartModalBtn}>
-              <Button variant="secondary" className={style.grayBtn} onClick={handleClose}>쇼핑 계속하기</Button>
+              <Button 
+                variant="secondary" 
+                className={style.grayBtn} 
+                onClick={handleClose}
+              >쇼핑 계속하기
+              </Button>
               <Button className={style.purpleBtn} onClick={() => navigate("/Cart")}>장바구니로 이동</Button>
             </div>
           </Modal.Body>
@@ -253,23 +306,66 @@ function TabContent(props) {
 }
 
 function ProductInfo(props) {
+  const subImg = props.thisItem.subImg;
+
+  const imgSrc = (() => {
+  try {
+    const parsed = typeof subImg === 'string' ? JSON.parse(subImg) : subImg;
+    const result = Array.isArray(parsed) ? parsed[0] : parsed;
+    console.log('imgSrc:', result); // 추가
+    return result;
+  } catch {
+    return subImg;
+  }
+})();
+
   return (
-    <div className={style.productInfo} style={{ padding: "50px 0 150px" }}>
+    <div 
+      className={style.productInfo} 
+      style={{ 
+        padding: "50px 0 150px" 
+      }}>
       <div>
-        <img src={"/" + props.thisItem.subImg} alt="productInfo" />
+        <img src={"/" + imgSrc} alt="productInfo" />
       </div>
       <div className={style.infoDetail}>
         <h3 className={style.title}>상품정보 제공 고시</h3>
         <table className={style.detailTable}>
           <tbody>
-            <tr><th>품명 및 모델명</th><td>{props.thisItem.product}</td></tr>
-            <tr><th>소재</th><td>상세페이지 참조</td></tr>
-            <tr><th>색상</th><td>상세페이지 참조</td></tr>
-            <tr><th>제조자</th><td>상세페이지 참조</td></tr>
-            <tr><th>제조국</th><td>상세페이지 참조</td></tr>
-            <tr><th>취급시 주의사항</th><td>상세페이지 참조</td></tr>
-            <tr><th>품질보증기준</th><td>상세페이지 참조</td></tr>
-            <tr><th>A/S 책임자와 전화번호</th><td>상세페이지 참조</td></tr>
+            <tr>
+              <th>품명 및 모델명</th>
+              <td>
+                {props.thisItem.product || props.thisItem.name}
+              </td>
+            </tr>
+            <tr>
+              <th>소재</th>
+              <td>상세페이지 참조</td>
+            </tr>
+            <tr>
+              <th>색상</th>
+              <td>상세페이지 참조</td>
+            </tr>
+            <tr>
+              <th>제조자</th>
+              <td>상세페이지 참조</td>
+            </tr>
+            <tr>
+              <th>제조국</th>
+              <td>상세페이지 참조</td>
+            </tr>
+            <tr>
+              <th>취급시 주의사항</th>
+              <td>상세페이지 참조</td>
+            </tr>
+            <tr>
+              <th>품질보증기준</th>
+              <td>상세페이지 참조</td>
+            </tr>
+            <tr>
+              <th>A/S 책임자와 전화번호</th>
+              <td>상세페이지 참조</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -294,15 +390,9 @@ function Review(props) {
           <Star ratingTitle="배송" />
         </div>
       </div>
-      <div className={`row ${style.reviewBox}`}>
-        <div className="col-xl-12">
-          <ul>
-            <ReviewContent thisItem={props.thisItem} num={0} />
-            <ReviewContent thisItem={props.thisItem} num={1} />
-            <ReviewContent thisItem={props.thisItem} num={2} />
-          </ul>
-        </div>
-      </div>
+      <ReviewList 
+        thisItem={props.thisItem}
+      />
     </div>
   );
 }
@@ -312,8 +402,12 @@ function StarBig(props) {
     <div className={style.starsBig}>
       <p className={style.ratingTitle}>{props.ratingTitle}</p>
       <div className={style.ratingBox}>
-        <div className={style.ratingBase}><img src="/img/star_rating_base.svg" alt="starbase" /></div>
-        <div className={style.ratingFill}><img src="/img/star_rating_fill.svg" alt="starfill" /></div>
+        <div className={style.ratingBase}>
+          <img src="/img/star_rating_base.svg" alt="starbase" />
+        </div>
+        <div className={style.ratingFill}>
+          <img src="/img/star_rating_fill.svg" alt="starfill" />
+        </div>
       </div>
     </div>
   );
@@ -322,62 +416,97 @@ function StarBig(props) {
 function Star(props) {
   return (
     <div className={style.stars}>
-      <p className={style.ratingTitle}>{props.ratingTitle}</p>
+      <p className={style.ratingTitle}>
+        {props.ratingTitle}
+      </p>
       <div className={style.ratingBox}>
-        <div className={style.ratingBase}><img src="/img/star_rating_base.svg" alt="starbase" /></div>
-        <div className={style.ratingFill}><img src="/img/star_rating_fill.svg" alt="starfill" /></div>
+        <div className={style.ratingBase}>
+          <img src="/img/star_rating_base.svg" alt="starbase" />
+        </div>
+        <div className={style.ratingFill}>
+          <img src="/img/star_rating_fill.svg" alt="starfill" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewList(props) {
+  const [reviewData, setReviewData] = useState([]);
+
+  useEffect(() => {
+    const fetchReview = async () => {
+      try{
+        const data = await axiosGet('/detail/review');
+        console.log('review raw data:', data);        // 추가
+        console.log('isArray:', Array.isArray(data)); // 추가
+        setReviewData(Array.isArray(data) ? data : []);
+      }
+      catch (error) {
+        console.error('리뷰 조회 실패 : ', error);
+      }
+    };
+    fetchReview();
+  }, [])
+
+  return (
+    <div className={`row ${style.reviewBox}`}>
+      <div className="col-xl-12">
+        <ul>
+          {reviewData.length > 0 ? (
+            reviewData.map((review, idx) => (
+              <ReviewContent key={review.id ?? idx} thisItem={props.thisItem} review={review} />
+            ))
+          ) : (
+            <li style={{ padding: '20px', color: '#888' }}>등록된 후기가 없습니다.</li>
+          )}
+        </ul>
       </div>
     </div>
   );
 }
 
 function ReviewContent(props) {
-  /*
-  let [reviewData] = useState(review);
-  */
-  let [count, setCount] = useState(0);
-
-  const [reviewData, setReviewData] = useState([]);
-
-  useEffect(() => {
-    const fetchReview = async () => {
-      const fetchData = await axiosGet(`/detail/review`);
-      // console.log('review-------->', fetchData);
-      setReviewData(fetchData);
-    }
-    fetchReview();
-  }, [])
+  const { review, thisItem } = props;
+  const [count, setCount] = useState(0);
 
   return (
     <li className={style.reviewContent}>
       <div className={style.reviewLeft}>
-
         <div className={style.imgbox}>
           <img src="/img/profile_basic.svg" alt="profile" />
         </div>
-
       </div>
 
       <div className={style.reviewRight}>
-        <p className={style.product}>{props.thisItem.product}</p>
+        <p className={style.product}>
+          {thisItem.product || thisItem.name}
+        </p>
         <p className={style.option}>옵션1</p>
 
         <div className={style.ratingBox}>
           <div className={style.ratingBase}>
             <img src="/img/star_rating_base.svg" alt="starbase" />
           </div>
-          <div className={style.ratingFill} style={{ width: reviewData.percent }}>
+          <div 
+            className={style.ratingFill} 
+            style={{ 
+              width: review.percent 
+            }}>
             <img src="/img/star_rating_fill.svg" alt="starfill" />
           </div>
-          <span>{reviewData.rating}</span>
+          <span>{review.rating}</span>
         </div>
 
         <p className={style.content}>
-          {reviewData.text}
+          {review.text}
         </p>
 
         <div className={style.btnbox}>
-          <div className={style.thankBtn} onClick={() => setCount(count + 1)}>
+          <div 
+            className={style.thankBtn} 
+            onClick={() => setCount(count + 1)}
+          >
             <i className="fa-solid fa-thumbs-up"></i>
             <span>감사요</span><span>{count}</span>
           </div>
@@ -385,7 +514,7 @@ function ReviewContent(props) {
             <span>신고하기</span>
           </div>
           <div className={style.data}>
-            <span>{reviewData.date}</span>
+            <span>{review.date}</span>
           </div>
         </div>
       </div>
@@ -395,24 +524,50 @@ function ReviewContent(props) {
 
 function Delivery() {
   return (
-    <div className={style.deliveryDetail} style={{ padding: "50px 0 150px" }}>
+    <div 
+      className={style.deliveryDetail} 
+      style={{ padding: "50px 0 150px" }}>
       <h3 className={style.title}>상품정보 제공 고시</h3>
       <table className={style.detailTable}>
         <tbody>
-          <tr><th>배송</th><td>브랜드사 직접배송</td></tr>
-          <tr><th>배송비</th><td>무료</td></tr>
-          <tr><th>제주도/도서산간지역</th><td>제주도: 5,500원 / 도서 산간지역:5,500원</td></tr>
-          <tr><th>배송불가지역</th><td>배송 불가 지역이 없습니다.</td></tr>
-          <tr><th>배송기간</th><td>평일기준 3-5일 소요</td></tr>
+          <tr>
+            <th>배송</th>
+            <td>브랜드사 직접배송</td>
+          </tr>
+          <tr>
+            <th>배송비</th>
+            <td>무료</td>
+          </tr>
+          <tr>
+            <th>제주도/도서산간지역</th>
+            <td>제주도: 5,500원 / 도서 산간지역:5,500원</td>
+          </tr>
+          <tr>
+            <th>배송불가지역</th>
+            <td>배송 불가 지역이 없습니다.</td>
+          </tr>
+          <tr>
+            <th>배송기간</th>
+            <td>평일기준 3-5일 소요</td>
+          </tr>
         </tbody>
       </table>
       <div className={style.changeDetail}>
         <h3 className={style.title}>반품/교환</h3>
         <table className={style.detailTable}>
           <tbody>
-            <tr><th>반품배송비</th><td>반품비용 : 5,000 원</td></tr>
-            <tr><th>교환 배송비</th><td>교환비용 : 5,000 원</td></tr>
-            <tr><th>보내실 곳</th><td>(12950) 경기 하남시 대청로 9 7층 L7119호</td></tr>
+            <tr>
+              <th>반품배송비</th>
+              <td>반품비용 : 5,000 원</td>
+            </tr>
+            <tr>
+              <th>교환 배송비</th>
+              <td>교환비용 : 5,000 원</td>
+            </tr>
+            <tr>
+              <th>보내실 곳</th>
+              <td>(12950) 경기 하남시 대청로 9 7층 L7119호</td>
+            </tr>
           </tbody>
         </table>
       </div>

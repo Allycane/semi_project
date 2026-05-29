@@ -139,7 +139,7 @@ const ProductList = ({products}) => {
         <Products
           key={item.id}
           id={item.id}
-          categoryId={item.category_id}
+          categoryId={item.categoryId}
           imgUrl={item.imgUrl}
           shop={item.shop}
           product={item.product}

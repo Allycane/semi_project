@@ -188,14 +188,8 @@ function NavGroup() {
 						</div>
 					}
 				/>
-				<Route path="/detail/hot/:id" element={<Detail />} />
-				<Route path="/detail/best/bag/:id" element={<Detail />} />
-				<Route path="/detail/best/item/:id" element={<Detail />} />
-				<Route path="/detail/best/racquet/:id" element={<Detail />} />
-				<Route path="/detail/best/woman/:id" element={<Detail />} />
-				<Route path="/detail/best/man/:id" element={<Detail />} />
-				<Route path="/detail/best/acc/:id" element={<Detail />} />
-				<Route path="/detail/best/shoes/:id" element={<Detail />} />
+				<Route path="/detail/:category/:id" element={<Detail />} />
+				<Route path="/detail/:category/:subCategory/:id" element={<Detail />} />
 				<Route path="/cart" element={<Cart />} />
 				<Route path="/checkout" element={<Checkout />} />
 				{/* cardLists 부분 수정했습니다. 2026-05-27 */}
