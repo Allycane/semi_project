@@ -26,6 +26,7 @@ function Detail() {
   let [multi, setMulti] = useState(bestbag);
   let [like, setLike] = useState(0);
   let thisItem = multi[Number(id)];
+  
 
   let [tap, setTap] = useState(0);
   let [scrollActive, setScrollActive] = useState(false);
@@ -201,6 +202,20 @@ function Price(props) {
             }
 
             // 바로구매 로직 있으면 여기 작성
+            navigate('/checkout', {
+                state: {
+                  type: 'direct',
+                  item: {
+                    pid: basket.id,
+                    name: basket.product,
+                    image: basket.imgUrl,
+                    info: basket.shop,
+                    price: basket.price,
+                    qty: count,
+                    size: 'Free',
+                  },
+                },
+              });
             
           }}
         >
