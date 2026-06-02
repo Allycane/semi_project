@@ -3,6 +3,9 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuthStore } from "../../store/useAuthStore.js";
 import CardListPage from "./CardListPage.jsx"; //cardList를 위해 새로운 페이지 추가 2026-05-27
+import BestPage from "./BestPage.jsx";
+import HotPage from "./HotPage.jsx";
+import StylePage from "./StylePage.jsx";
 
 import Login from "./Login.jsx";
 import SignUp from "./SignUp.jsx";
@@ -42,6 +45,12 @@ function NavGroup() {
 		marginLeft: "50px",
 	};
 	const bold = { fontSize: "20px", fontWeight: "700" };
+
+	const boldDisabled = {
+		...bold,
+		cursor: "default",
+		pointerEvents: "none"
+	};
 
 	const handleLogout = () => {
 		logout();
@@ -85,33 +94,31 @@ function NavGroup() {
 				</Container>
 			</Navbar>
 
-			<Navbar expand="xxl">
+			<Navbar expand="xxl" style={{ position: "sticky", top: 0, zIndex: 1000, backgroundColor: "#fff" }}>
 				<Container className="categoryBar">
 					<Navbar.Brand
 						style={{ cursor: "pointer" }}
-						onClick={() => navigate("/")}
+						onClick={() => { navigate("/"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
 					>
 						<img src="/img/logo.svg" width="150" height="65" alt="logo" />
 					</Navbar.Brand>
 					<Navbar.Collapse className="category">
 						<Nav className="me-auto">
 							<div style={row} className="community">
-								<Nav.Link onClick={() => navigate("")} style={bold}>
+								<Nav.Link style={boldDisabled}>
 									커뮤니티
 								</Nav.Link>
-								<Nav.Link onClick={() => navigate("")}>SNS</Nav.Link>
-								<Nav.Link onClick={() => navigate("")}>컨텐츠</Nav.Link>
-								<Nav.Link onClick={() => navigate("")}>질문답변</Nav.Link>
-							</div>
-							<div style={row} className="store">
-								<Nav.Link onClick={() => navigate("")} style={bold}>
-									스토어
-								</Nav.Link>
-								<Nav.Link onClick={() => navigate("")}>베스트</Nav.Link>
-								<Nav.Link onClick={() => navigate("")}>카테고리</Nav.Link>
+								<Nav.Link onClick={() => navigate("/sns")}>SNS</Nav.Link>
 								<Nav.Link onClick={() => navigate("/cardLists")}>
 									기획전
 								</Nav.Link>
+							</div>
+							<div style={row} className="store">
+								<Nav.Link style={boldDisabled}>
+									스토어
+								</Nav.Link>
+								<Nav.Link onClick={() => navigate("/hot")}>HOT</Nav.Link>
+								<Nav.Link onClick={() => navigate("/category")}>카테고리</Nav.Link>
 							</div>
 						</Nav>
 					</Navbar.Collapse>
@@ -177,6 +184,10 @@ function NavGroup() {
 						</div>
 					}
 				/>
+				<Route path="/sns"      element={<StylePage isClicked={isClicked} setIsClicked={setIsClicked} />} />
+				<Route path="/hot"      element={<HotPage   isClicked={isClicked} setIsClicked={setIsClicked} />} />
+				<Route path="/category" element={<BestPage  isClicked={isClicked} setIsClicked={setIsClicked} />} />
+
 				<Route path="/detail/:category/:id" element={<Detail />} />
 				<Route path="/detail/:category/:subCategory/:id" element={<Detail />} />
 				<Route path="/cart" element={<Cart />} />
