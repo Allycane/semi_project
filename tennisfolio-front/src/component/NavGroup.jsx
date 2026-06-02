@@ -27,7 +27,7 @@ function NavGroup() {
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
 	const [showSignUp, setShowSignUp] = useState(false);
-  const handleCloseSignUp = () => setShowSignUp(false);
+	const handleCloseSignUp = () => setShowSignUp(false);
 	const [loginShow, setLoginShow] = useState(false); // 로그인 모달
 	const handleLoginClose = () => setLoginShow(false);
 
@@ -71,11 +71,11 @@ function NavGroup() {
 							<>
 								<Login />
 								<Nav.Link
-                                    className="loginLink"
-                                    onClick={() => setShowSignUp(true)}
-                                >
-                                    회원가입
-                                </Nav.Link>
+									className="loginLink"
+									onClick={() => setShowSignUp(true)}
+								>
+									회원가입
+								</Nav.Link>
 							</>
 						)}
 						<Nav.Link href="#" className="loginLink">
@@ -96,36 +96,20 @@ function NavGroup() {
 					<Navbar.Collapse className="category">
 						<Nav className="me-auto">
 							<div style={row} className="community">
-								<Nav.Link
-									onClick={() => navigate("/detail/hot/0")}
-									style={bold}
-								>
+								<Nav.Link onClick={() => navigate("")} style={bold}>
 									커뮤니티
 								</Nav.Link>
-								<Nav.Link onClick={() => navigate("/detail/hot/1")}>
-									SNS
-								</Nav.Link>
-								<Nav.Link onClick={() => navigate("/detail/hot/2")}>
-									컨텐츠
-								</Nav.Link>
-								<Nav.Link onClick={() => navigate("/detail/hot/3")}>
-									질문답변
-								</Nav.Link>
+								<Nav.Link onClick={() => navigate("")}>SNS</Nav.Link>
+								<Nav.Link onClick={() => navigate("")}>컨텐츠</Nav.Link>
+								<Nav.Link onClick={() => navigate("")}>질문답변</Nav.Link>
 							</div>
 							<div style={row} className="store">
-								<Nav.Link
-									onClick={() => navigate("/detail/hot/4")}
-									style={bold}
-								>
+								<Nav.Link onClick={() => navigate("")} style={bold}>
 									스토어
 								</Nav.Link>
-								<Nav.Link onClick={() => navigate("/detail/hot/5")}>
-									베스트
-								</Nav.Link>
-								<Nav.Link onClick={() => navigate("/detail/hot/6")}>
-									카테고리
-								</Nav.Link>
-								<Nav.Link onClick={() => navigate("/detail/hot/7")}>
+								<Nav.Link onClick={() => navigate("")}>베스트</Nav.Link>
+								<Nav.Link onClick={() => navigate("")}>카테고리</Nav.Link>
+								<Nav.Link onClick={() => navigate("/cardLists")}>
 									기획전
 								</Nav.Link>
 							</div>
@@ -136,14 +120,18 @@ function NavGroup() {
 							<i className="fa-solid fa-magnifying-glass"></i>
 						</Nav.Link>
 						{isLogin && (
-  <Nav.Link onClick={() => navigate("/cart")}>
-    <i className="fa-solid fa-cart-shopping"></i>
-  </Nav.Link>
-)}
+							<Nav.Link onClick={() => navigate("/cart")}>
+								<i className="fa-solid fa-cart-shopping"></i>
+							</Nav.Link>
+						)}
 						<Nav.Link onClick={handleShow}>
 							<i className="fa-solid fa-bars"></i>
 						</Nav.Link>
-						<Menu show={show} handleClose={handleClose} handleShowSignUp={() => setShowSignUp(true)} />
+						<Menu
+							show={show}
+							handleClose={handleClose}
+							handleShowSignUp={() => setShowSignUp(true)}
+						/>
 					</Navbar>
 				</Container>
 			</Navbar>
@@ -194,7 +182,7 @@ function NavGroup() {
 				<Route path="/cart" element={<Cart />} />
 				<Route path="/checkout" element={<Checkout />} />
 				<Route path="/checkout/success" element={<PaymentSuccess />} />
-				
+
 				{/* cardLists 부분 수정했습니다. 2026-05-27 */}
 				<Route
 					path="/cardLists"
